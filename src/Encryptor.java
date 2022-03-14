@@ -122,6 +122,50 @@ public class Encryptor
      */
     public String decryptMessage(String encryptedMessage)
     {
-        return "s";
+        int maxBoxes = numRows * numCols;
+        int len = encryptedMessage.length() / maxBoxes;
+        String decryption = "";
+        String str = "";
+        int j = 0;
+
+        rearrangeArr(encryptedMessage);
+        for (int i = 0; i < len; i++)
+        {
+            str = encryptedMessage.substring(j, j + maxBoxes);
+            j += maxBoxes;
+            rearrangeArr(str);
+            for (int r = 0; r < letterBlock.length; r++)
+            {
+                for (int c  = 0; c < letterBlock[r].length; c++)
+                {
+                    decryption += letterBlock[r][c];
+                }
+            }
+        }
+
+        int cut = decryption.length();
+        for (int i = decryption.length() - 1; i > 0; i--)
+        {
+            if (decryption.substring(i, i + 1).equals("A")) cut--;
+            else break;
+            decryption = decryption.substring(0, cut);
+        }
+        return decryption;
     }
+
+    private void rearrangeArr(String str)
+    {
+        int i = 0;
+        String charr = "";
+        for (int c = 0; c < letterBlock[0].length; c++) {
+            for (int r = 0; r < letterBlock.length; r++) {
+                if (i + 1 <= str.length()) {
+                    charr = str.substring(i, i + 1);
+                    letterBlock[r][c] = charr;
+                    i++;
+                }
+            }
+        }
+    }
+    
 }
